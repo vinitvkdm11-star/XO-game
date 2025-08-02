@@ -4,54 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Premium XO Game</title>
-
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#4CAF50">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Lottie Animation and Confetti -->
-  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-
 <body>
-  <div id="lottie-left" class="lottie-girl"></div>
-  <div id="lottie-right" class="lottie-girl"></div>
-
   <div class="game-container">
-    <h1>XO Game</h1>
+    <h1>Premium XO Game</h1>
 
-    <div id="controls" class="controls">
-      <label>Choose:
-        <select id="playerChoice">
-          <option value="X">X</option>
-          <option value="O">O</option>
-        </select>
-      </label>
+    <div class="controls">
+      <label for="gameMode">Mode:</label>
+      <select id="gameMode">
+        <option value="ai">Single Player (AI)</option>
+        <option value="2p">Two Player</option>
+      </select>
 
-      <label>Difficulty:
-        <select id="difficulty">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard" selected>Hard</option>
-        </select>
-      </label>
+      <label for="playerChoice">Play as:</label>
+      <select id="playerChoice">
+        <option value="X">X</option>
+        <option value="O">O</option>
+      </select>
 
-      <button onclick="toggleMode()">🌗 Toggle Mode</button>
-      <button onclick="resetGame()">🔄 Reset</button>
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+
+      <button onclick="resetGame()">🔁 Reset Game</button>
+      <button onclick="toggleMode()">🌗 Theme</button>
     </div>
 
-    <div id="board" class="board"></div>
+    <div id="board"></div>
     <div id="status" class="status"></div>
-  </div>
 
-  <canvas id="confetti"></canvas>
-  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+    <!-- 🎯 Scoreboard -->
+    <div class="scoreboard">
+      <p>
+        Score —
+        <strong>X:</strong> <span id="scoreX">0</span> |
+        <strong>O:</strong> <span id="scoreO">0</span> |
+        <strong>Draws:</strong> <span id="scoreDraw">0</span>
+      </p>
+      <button onclick="resetScores()">🧹 Reset Scores</button>
+    </div>
+
+    <canvas id="confetti"></canvas>
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+  </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
