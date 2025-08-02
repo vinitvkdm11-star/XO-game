@@ -45,8 +45,10 @@ function handleMove(e) {
 function playMove(index, player) {
   boardState[index] = player;
   cells[index].textContent = player;
+  cells[index].classList.add(player.toLowerCase()); // ← 👈 Add this line
   clickSound.play();
 }
+
 
 function endGame(msg, showConfetti = false) {
   gameActive = false;
@@ -134,3 +136,4 @@ loadLottie('lottie-right', 'URL.json');
 */
 
 initGame();
+
