@@ -1,12 +1,18 @@
 const board = document.getElementById('board');
 const status = document.getElementById('status');
 const clickSound = document.getElementById('clickSound');
-const confettiCanvas = document.getElementById('confetti');
 
+const gameModeSelector = document.getElementById('gameMode');
 const difficultySelector = document.getElementById('difficulty');
 const playerChoiceSelector = document.getElementById('playerChoice');
 
-let cells, currentPlayer, gameActive, boardState, aiPlayer, humanPlayer;
+const scoreXEl = document.getElementById('scoreX');
+const scoreOEl = document.getElementById('scoreO');
+const scoreDrawEl = document.getElementById('scoreDraw');
+
+let cells, currentPlayer, gameActive, boardState;
+let aiPlayer, humanPlayer;
+let scoreX = 0, scoreO = 0, scoreDraw = 0;
 
 function initGame() {
   board.innerHTML = '';
@@ -27,33 +33,69 @@ function initGame() {
   cells = document.querySelectorAll('.cell');
   status.textContent = `${currentPlayer}'s turn`;
 
-  if (aiPlayer === 'X') makeAIMove();
+  if (gameModeSelector.value === 'ai' && aiPlayer === 'X') {
+    setTimeout(makeAIMove, 300);
+  }
 }
 
 function handleMove(e) {
   const index = e.target.dataset.index;
   if (!gameActive || boardState[index]) return;
+
   playMove(index, currentPlayer);
+
   if (checkWin(boardState, currentPlayer)) return endGame(`${currentPlayer} wins!`, true);
   if (boardState.every(cell => cell)) return endGame("It's a draw!");
-  currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  status.textContent = `${currentPlayer}'s turn`;
 
-  if (currentPlayer === aiPlayer) setTimeout(makeAIMove, 300);
+  if (gameModeSelector.value === 'ai') {
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    status.textContent = `${currentPlayer}'s turn`;
+    if (currentPlayer === aiPlayer) {
+      setTimeout(makeAIMove, 300);
+    }
+  } else {
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    status.textContent = `${currentPlayer}'s turn`;
+  }
 }
 
 function playMove(index, player) {
   boardState[index] = player;
   cells[index].textContent = player;
-  cells[index].classList.add(player.toLowerCase()); // ← 👈 Add this line
+  cells[index].classList.add(player.toLowerCase());
   clickSound.play();
 }
-
 
 function endGame(msg, showConfetti = false) {
   gameActive = false;
   status.textContent = msg;
-  if (showConfetti) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+  if (msg.includes('X')) scoreX++;
+  else if (msg.includes('O')) scoreO++;
+  else scoreDraw++;
+
+  updateScores();
+
+  if (showConfetti) {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
+}
+
+function updateScores() {
+  scoreXEl.textContent = scoreX;
+  scoreOEl.textContent = scoreO;
+  scoreDrawEl.textContent = scoreDraw;
+}
+
+function resetScores() {
+  scoreX = 0;
+  scoreO = 0;
+  scoreDraw = 0;
+  updateScores();
 }
 
 function makeAIMove() {
@@ -66,15 +108,18 @@ function makeAIMove() {
   } else {
     move = getBestMove();
   }
+
   playMove(move, aiPlayer);
+
   if (checkWin(boardState, aiPlayer)) return endGame(`${aiPlayer} wins!`, true);
   if (boardState.every(cell => cell)) return endGame("It's a draw!");
+
   currentPlayer = humanPlayer;
   status.textContent = `${currentPlayer}'s turn`;
 }
 
 function getRandomMove() {
-  const empty = boardState.map((val, idx) => val ? null : idx).filter(v => v !== null);
+  const empty = boardState.map((v, i) => v ? null : i).filter(v => v !== null);
   return empty[Math.floor(Math.random() * empty.length)];
 }
 
@@ -83,12 +128,14 @@ function getBestMove() {
 }
 
 function minimax(newBoard, player) {
-  const empty = newBoard.map((val, idx) => val ? null : idx).filter(v => v !== null);
+  const empty = newBoard.map((v, i) => v ? null : i).filter(v => v !== null);
+
   if (checkWin(newBoard, humanPlayer)) return { score: -10 };
   if (checkWin(newBoard, aiPlayer)) return { score: 10 };
   if (empty.length === 0) return { score: 0 };
 
   const moves = [];
+
   for (let i of empty) {
     const move = { index: i };
     newBoard[i] = player;
@@ -120,20 +167,10 @@ function resetGame() {
   initGame();
 }
 
-// Optional: Lottie girl animations (you can re-add later if needed)
-/*
-function loadLottie(id, url) {
-  lottie.loadAnimation({
-    container: document.getElementById(id),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    path: url
-  });
-}
-loadLottie('lottie-left', 'URL.json');
-loadLottie('lottie-right', 'URL.json');
-*/
+gameModeSelector.addEventListener('change', () => {
+  const aiControls = document.querySelectorAll('#playerChoice, #difficulty');
+  aiControls.forEach(ctrl => ctrl.disabled = gameModeSelector.value !== 'ai');
+  initGame();
+});
 
 initGame();
-
