@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium XO Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <div id="lottie-left" class="lottie-girl"></div>
+  <div id="lottie-right" class="lottie-girl"></div>
+
+  <div class="game-container">
+    <h1>XO Game</h1>
+
+    <div id="controls" class="controls">
+      <label>Choose:
+        <select id="playerChoice">
+          <option value="X">X</option>
+          <option value="O">O</option>
+        </select>
+      </label>
+
+      <label>Difficulty:
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard" selected>Hard</option>
+        </select>
+      </label>
+
+      <button onclick="toggleMode()">🌗 Toggle Mode</button>
+      <button onclick="resetGame()">🔄 Reset</button>
+    </div>
+
+    <div id="board" class="board"></div>
+    <div id="status" class="status"></div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
