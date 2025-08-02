@@ -1,7 +1,5 @@
-/* Base setup */
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #e0eafc, #cfdef3);
   transition: background 0.3s, color 0.3s;
@@ -12,16 +10,10 @@ body.dark {
   color: #fff;
 }
 
-/* Container */
-.game-container {
-  text-align: center;
-  padding: 2rem 1rem;
-}
-
-/* Heading */
 h1 {
+  text-align: center;
   font-size: clamp(2rem, 6vw, 3rem);
-  margin-bottom: 1rem;
+  margin: 1rem;
   color: #333;
 }
 
@@ -29,7 +21,11 @@ body.dark h1 {
   color: #eee;
 }
 
-/* Controls */
+.game-container {
+  padding: 1rem;
+  text-align: center;
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -40,7 +36,6 @@ body.dark h1 {
 
 label {
   font-size: 1rem;
-  color: inherit;
 }
 
 select, button {
@@ -60,11 +55,6 @@ select:hover, button:hover {
   transform: scale(1.05);
 }
 
-select {
-  appearance: none;
-}
-
-/* Game Board */
 #board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -83,7 +73,6 @@ body.dark #board {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Individual Cells */
 .cell {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -110,14 +99,51 @@ body.dark .cell {
   transform: scale(1.05);
 }
 
-/* Status Text */
-.status {
-  margin-top: 20px;
-  font-size: 1.2rem;
-  font-weight: 500;
+.cell.x {
+  color: #FF3B30;
+  text-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
+  animation: pop 0.3s ease-out;
 }
 
-/* Confetti */
+.cell.o {
+  color: #007AFF;
+  text-shadow: 0 0 10px rgba(0, 122, 255, 0.6);
+  animation: pop 0.3s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.2); opacity: 0.2; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+.status {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.scoreboard {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.scoreboard button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  background: #ff5e57;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.scoreboard button:hover {
+  background: #d94c4c;
+}
+
 canvas#confetti {
   position: fixed;
   top: 0;
@@ -127,46 +153,3 @@ canvas#confetti {
   pointer-events: none;
   z-index: 1000;
 }
-
-/* Mobile: Hide Lottie or extras */
-@media (max-width: 500px) {
-  .lottie-girl {
-    display: none;
-  }
-}
-/* Colored and animated X */
-.cell.x {
-  color: #FF3B30;
-  text-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-}
-
-/* Colored and animated O */
-.cell.o {
-  color: #007AFF;
-  text-shadow: 0 0 10px rgba(0, 122, 255, 0.6);
-  font-weight: bold;
-  transition: all 0.3s ease-in-out;
-}
-/* Keyframes for scale bounce */
-@keyframes pop {
-  0% {
-    transform: scale(0.2);
-    opacity: 0.2;
-  }
-  60% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Apply animation when X or O is placed */
-.cell.x,
-.cell.o {
-  animation: pop 0.3s ease-out;
-}
-
