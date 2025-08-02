@@ -1,5 +1,7 @@
+/* Base setup */
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #e0eafc, #cfdef3);
   transition: background 0.3s, color 0.3s;
@@ -10,10 +12,16 @@ body.dark {
   color: #fff;
 }
 
-h1 {
+/* Container */
+.game-container {
   text-align: center;
+  padding: 2rem 1rem;
+}
+
+/* Heading */
+h1 {
   font-size: clamp(2rem, 6vw, 3rem);
-  margin: 1rem;
+  margin-bottom: 1rem;
   color: #333;
 }
 
@@ -21,11 +29,7 @@ body.dark h1 {
   color: #eee;
 }
 
-.game-container {
-  padding: 1rem;
-  text-align: center;
-}
-
+/* Controls */
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -36,6 +40,7 @@ body.dark h1 {
 
 label {
   font-size: 1rem;
+  color: inherit;
 }
 
 select, button {
@@ -55,6 +60,11 @@ select:hover, button:hover {
   transform: scale(1.05);
 }
 
+select {
+  appearance: none;
+}
+
+/* Game Board */
 #board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -73,6 +83,7 @@ body.dark #board {
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Individual Cells */
 .cell {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -99,30 +110,54 @@ body.dark .cell {
   transform: scale(1.05);
 }
 
+/* Colored and animated X */
 .cell.x {
   color: #FF3B30;
   text-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
   animation: pop 0.3s ease-out;
 }
 
+/* Colored and animated O */
 .cell.o {
   color: #007AFF;
   text-shadow: 0 0 10px rgba(0, 122, 255, 0.6);
   animation: pop 0.3s ease-out;
 }
 
+/* Pop animation */
 @keyframes pop {
-  0% { transform: scale(0.2); opacity: 0.2; }
-  60% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.2);
+    opacity: 0.2;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
+/* Status Text */
 .status {
+  margin-top: 20px;
   font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 1rem;
+  font-weight: 500;
 }
 
+/* Confetti */
+canvas#confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Scoreboard */
 .scoreboard {
   margin-top: 1rem;
   font-size: 1rem;
@@ -144,12 +179,33 @@ body.dark .cell {
   background: #d94c4c;
 }
 
-canvas#confetti {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
+/* Mobile responsiveness */
+@media (max-width: 500px) {
+  .controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  select, button {
+    width: 90%;
+    font-size: 1rem;
+  }
+
+  .scoreboard p {
+    font-size: 0.95rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  .status {
+    font-size: 1rem;
+  }
+
+  .scoreboard button {
+    font-size: 0.85rem;
+    width: 80%;
+  }
 }
