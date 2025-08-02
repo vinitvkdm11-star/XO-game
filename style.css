@@ -1,124 +1,211 @@
-/* === Base Setup Tweaks === */
+/* Base setup */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #e0eafc, #cfdef3);
   transition: background 0.3s, color 0.3s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
 }
 
+body.dark {
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  color: #fff;
+}
+
+/* Container */
 .game-container {
-  width: 100%;
-  max-width: 500px;
-  padding: 1rem;
-  box-sizing: border-box;
   text-align: center;
+  padding: 2rem 1rem;
 }
 
-/* === Game Controls (Responsive) === */
+/* Heading */
+h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+body.dark h1 {
+  color: #eee;
+}
+
+/* Controls */
 .controls {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 1.2rem;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
-.controls label {
-  flex-basis: 100%;
-  text-align: center;
-  font-weight: bold;
-}
-
-.controls select, .controls button {
-  flex: 1 1 45%;
-  min-width: 120px;
-  padding: 10px;
+label {
   font-size: 1rem;
-  border-radius: 8px;
+  color: inherit;
 }
 
-/* === Game Board === */
+select, button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  background: #4a90e2;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+
+select:hover, button:hover {
+  background: #357ab8;
+  transform: scale(1.05);
+}
+
+select {
+  appearance: none;
+}
+
+/* Game Board */
 #board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  max-width: 350px;
+  gap: 15px;
+  width: 90vw;
+  max-width: 400px;
   margin: 0 auto;
-  aspect-ratio: 1 / 1;
+  padding: 15px;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 
-/* === Cell Styling === */
+body.dark #board {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Individual Cells */
 .cell {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: clamp(2rem, 7vw, 3rem);
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
+  border-radius: 15px;
   color: #222;
-  font-size: 2rem;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   font-weight: bold;
-  transition: 0.2s ease-in-out;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  backdrop-filter: blur(6px);
 }
 
-/* === Status & Scoreboard === */
-.status, .scoreboard {
+body.dark .cell {
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+/* Colored and animated X */
+.cell.x {
+  color: #FF3B30;
+  text-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
+  animation: pop 0.3s ease-out;
+}
+
+/* Colored and animated O */
+.cell.o {
+  color: #007AFF;
+  text-shadow: 0 0 10px rgba(0, 122, 255, 0.6);
+  animation: pop 0.3s ease-out;
+}
+
+/* Pop animation */
+@keyframes pop {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.2;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Status Text */
+.status {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Confetti */
+canvas#confetti {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Scoreboard */
+.scoreboard {
   margin-top: 1rem;
   font-size: 1rem;
 }
 
 .scoreboard button {
   margin-top: 0.5rem;
-  padding: 6px 12px;
+  padding: 0.4rem 0.8rem;
   font-size: 0.9rem;
+  background: #ff5e57;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-/* === Confetti Canvas === */
-canvas#confetti {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  pointer-events: none;
-  z-index: 1000;
+.scoreboard button:hover {
+  background: #d94c4c;
 }
 
-/* === Mobile Responsive Fixes === */
+/* Mobile responsiveness */
 @media (max-width: 500px) {
+  .controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  select, button {
+    width: 90%;
+    font-size: 1rem;
+  }
+
+  .scoreboard p {
+    font-size: 0.95rem;
+  }
+
   h1 {
     font-size: 1.8rem;
   }
 
-  .controls {
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .controls select,
-  .controls button {
-    width: 100%;
+  .status {
     font-size: 1rem;
   }
 
-  #board {
-    width: 90vw;
-    max-width: none;
-    gap: 10px;
-  }
-
-  .cell {
-    font-size: 2.5rem;
-    aspect-ratio: 1 / 1;
-  }
-
-  .scoreboard {
-    font-size: 0.95rem;
-  }
-
   .scoreboard button {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    width: 80%;
   }
 }
